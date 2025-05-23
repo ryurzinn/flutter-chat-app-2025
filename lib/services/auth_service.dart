@@ -87,9 +87,7 @@ class AuthService with ChangeNotifier{
     headers: {
       'Content-Type' : 'application/json'
     });
-
-  
-    print(resp.body);
+    
     autenticando = false;
   
     if(resp.statusCode == 200){
@@ -103,6 +101,32 @@ class AuthService with ChangeNotifier{
     }else{
       final respBody = jsonDecode(resp.body);
       return respBody['msg'];
+    }
+
+  }
+
+  Future<bool> isLoggedIn() async {
+
+    final token = await _storage.read(key: 'token');
+    final uri = Uri.parse('${Environment.apiUrl}/login/renew');
+
+    final resp = await http.get(uri, 
+    headers: {
+      'Content-Type' : 'application/json',
+      'x-token' : token.toString()
+    });
+
+    if(resp.statusCode == 200){
+      final loginResponse = loginResponseFromJson(resp.body);
+      usuario = loginResponse.usuario;
+
+      // TODO guardar el token en un lugar seguro
+      await _guardarToken(loginResponse.token);
+
+      return true;
+    }else{
+      logout();
+      return false;
     }
 
   }

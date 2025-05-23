@@ -40,13 +40,13 @@ class _UsuariosPageState extends State<UsuariosPage> {
       ),
       body: SmartRefresher(
         controller: _refreshController,
-        child: _listViewUsuarios(),
         enablePullDown: true,
         onRefresh: _cargarUsuarios,
         header: WaterDropHeader(
           complete: Icon(Icons.check, color: Colors.blue[400]),
           waterDropColor: Colors.blue 
         ),
+        child: _listViewUsuarios(),
       ),
     );
   }
@@ -65,8 +65,8 @@ class _UsuariosPageState extends State<UsuariosPage> {
         title: Text(usuario.nombre),
         subtitle: Text(usuario.email),
         leading: CircleAvatar(
-          child: Text(usuario.nombre.substring(0,2)),
           backgroundColor: Colors.blue[100],
+          child: Text(usuario.nombre.substring(0,2)),
         ),
         trailing: Container(
           width: 10,
